@@ -14,8 +14,6 @@ import dotty.tools.dotc.util.{NoSource, SourceFile}
 import scala.reflect.io.PlainFile
 
 
-
-
 object Translator {
 
   import Lispyfy._
@@ -37,7 +35,7 @@ object Translator {
 
 //    val fileName = "/Users/oleg/IdeaProjects/dotty-master/examples/hello.scala"
 
-    val fileName = "/Users/obaskakov/IdeaProjects/dotty/src/Hell.scala"
+    val fileName = "/Users/oleg/IdeaProjects/dotty/examples/Hell.scala"
 
     val sourceCode = getSource(fileName)
 
@@ -59,7 +57,9 @@ object Translator {
         println("PackageDef.pid: " + tree.pid)
         println()
         for (ss <- tree.stats) {
-//          procTopModuleDef(ss.asInstanceOf[ModuleDef])
+//          println(ss)
+
+//          Lispyfy.process(ss.asInstanceOf[ModuleDef].impl)
           }
         }
     }

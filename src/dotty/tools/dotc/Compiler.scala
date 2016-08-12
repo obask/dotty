@@ -7,16 +7,16 @@ import Periods._
 import Symbols._
 import Types._
 import Scopes._
-import typer.{FrontEnd, Typer, ImportInfo, RefChecks}
-import reporting.{Reporter, ConsoleReporter}
+import typer.{FrontEnd, ImportInfo, RefChecks, Typer}
+import reporting.{ConsoleReporter, Reporter}
 import Phases.Phase
 import transform._
 import transform.TreeTransforms.{TreeTransform, TreeTransformer}
 import core.DenotTransformers.DenotTransformer
 import core.Denotations.SingleDenotation
-
-import dotty.tools.backend.jvm.{LabelDefs, GenBCode, CollectSuperCalls}
+import dotty.tools.backend.jvm.{CollectSuperCalls, GenBCode, LabelDefs}
 import dotty.tools.backend.sjs.GenSJSIR
+import dotty.tools.backend.ssa.GenSSACode
 
 /** The central class of the dotc compiler. The job of a compiler is to create
  *  runs, which process given `phases` in a given `rootContext`.
@@ -95,8 +95,10 @@ class Compiler {
            new CollectSuperCalls,   // Find classes that are called with super
            new MoveStatics,         // Move static methods to companion classes
            new LabelDefs),          // Converts calls to labels to jumps
-      List(new GenSJSIR),           // Generate .js code
-      List(new GenBCode)            // Generate JVM bytecode
+//      List(new GenSJSIR),           // Generate .js code
+//      List(new GenBCode)            // Generate JVM bytecode
+      List(new GenSSACode)
+
     )
 
   var runId = 1
