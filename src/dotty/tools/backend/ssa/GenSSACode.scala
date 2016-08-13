@@ -6,9 +6,11 @@ import dotty.tools.dotc.ast.tpd.TypeDef
 import dotty.tools.dotc.ast.{Trees, tpd, untpd}
 import dotty.tools.dotc.core.Constants.Constant
 import dotty.tools.dotc.core.Contexts._
+import dotty.tools.dotc.core.Names.{TermName, TypeName}
 import dotty.tools.dotc.core.Phases.Phase
 import dotty.tools.dotc.core.StdNames._
 import dotty.tools.dotc.core.Symbols._
+import dotty.tools.dotc.core.Types.TypeRef
 import dotty.tools.dotc.core._
 import dotty.tools.dotc.printing.{PlainPrinter, RefinedPrinter}
 import org.scalajs.core.ir.Trees.EmptyTree
@@ -49,9 +51,15 @@ class GenSSACode extends Phase {
       p match {
         case s: String => "\"" + s + "\""
         case () => "Unit"
-        case Nil => "Nil"
+        case n: TermName if n.isEmpty => "(TermName )"
+        case n: TypeName => "(t " + n.toString + ")"
+
+        case List() => "Nil"
         case ll: List[_] => ll.map(toSource).mkString("[# ", " ", "]")
         case tpd.EmptyTree => "EmptyTree"
+        // TODO recover full path to types
+        case t: TypeRef =>
+          toSource(t.name)
         case t: tpd.TypeTree =>
           val tmp = if (t.hasType) toSource(t.typeOpt) else toSource(t.original)
           "(TypeTree " + tmp + ")"
@@ -72,9 +80,9 @@ class GenSSACode extends Phase {
 //    }
 
     println(tree)
-
     println("----------------")
-//    Lispyfy.processPackageDef(tree.asInstanceOf[PackageDef])
+
+    //    Lispyfy.processPackageDef(tree.asInstanceOf[PackageDef])
 
 
     entryPoints.clear()
