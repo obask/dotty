@@ -79,8 +79,8 @@ class GenSSACode extends Phase {
 //        printer.printListField("AST", xx.stats)
 //    }
 
-    println(tree)
-    println("----------------")
+//    println(tree)
+//    println("----------------")
 
     //    Lispyfy.processPackageDef(tree.asInstanceOf[PackageDef])
 
